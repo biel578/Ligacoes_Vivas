@@ -1,12 +1,12 @@
 ## Ligações Vivas
 
 ## ⭐️ Descrição
+"Ligações vivas" é um projeto que visa a interação indireta entre pessoas por meio de uma mecânica de perguntas e respostas, funcionando como um "quebra gelo" em conversas casuais para pessoas que estão em suas rotinas monotonas. 
 
 
 
-
-## 🔷 Objetivo do projeto
-
+## 🔷 Estrutura do projeto
+A aparência do projeto se assemelha a um orelhão telefônico, através de um visor o usuario poderá visualizar uma pergunta, um pouco abaixo do visor tem dois botões, um deles a pessoa pode gravar sua resposta, através do telefone do orelhão, ja no outro botão é possivel ouvir as respostas de outras pessoas, explorando a criatividade dos individuos. Um potenciômetro iria monitorar como as pessoas se sentem respondendo tais perguntas, que após 24 horas iria ser trocada por outra pergunta "quebra gelo".
 
 ## Membros
 
