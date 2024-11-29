@@ -155,15 +155,15 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-const char* mensagem = "Qual musica da sua vida, e a quem voce a dedicaria? "; // Define a mensagem que será exibida
-int scrollPos = 0; // Posição inicial para rolagem da mensagem
+const char* mensagem = "Qual musica da sua vida, e a quem voce a dedicaria? ";
+int scrollPos = 0; 
 int mensagemLen = strlen(mensagem); // Comprimento da mensagem
 
-// Defina o endereço I2C do seu display. Geralmente, é 0x27 ou 0x3F.
-LiquidCrystal_I2C lcd(0x27, 16, 2); // Inicializa o LCD I2C com 16 colunas e 2 linhas
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 TMRpcm audio;
-int file_number = 0; // Contador de arquivos gravados
+int file_number = 0; 
 const int recordLed = 7;
 const int mic_pin = A0;
 const int sample_rate = 16000;
@@ -181,29 +181,29 @@ void wait_min(int seconds) {
 }
 
 void setup() {
-  lcd.init(); // Inicializa o LCD
-  lcd.backlight(); // Liga a luz de fundo do LCD
+  lcd.init(); 
+  lcd.backlight();
   lcd.print("Pergunta: ");
-  lcd.setCursor(0, 0); // Move o cursor para a primeira linha
+  lcd.setCursor(0, 0);
 
   Serial.begin(9600);
   pinMode(mic_pin, INPUT);
   pinMode(recordLed, OUTPUT);
-  pinMode(botao, INPUT); // Configura o botão como entrada
+  pinMode(botao, INPUT);
   Serial.println("Carregando... SD card");
   if (!SD.begin(SD_CSPin)) {
     Serial.println("Erro ao inicializar o SD");
-    while (1); // Pausa se não conseguir inicializar o SD
+    while (1);
   }
   audio.CSPin = SD_CSPin;
 }
 
 void loop() {
-  // Exibe a mensagem com letreiro
-  lcd.setCursor(0, 1);
-  char buffer[17] = ""; // Buffer para armazenar o texto a ser exibido (16 caracteres + nulo)
 
-  // Preenche o buffer com a parte visível da mensagem
+  lcd.setCursor(0, 1);
+  char buffer[17] = ""; 
+
+
   for (int i = 0; i < 16; i++) {
     int index = (scrollPos + i) % mensagemLen; // Calcula o índice circular da mensagem
     buffer[i] = mensagem[index];
@@ -212,11 +212,11 @@ void loop() {
 
   lcd.print(buffer); // Exibe o texto na segunda linha
 
-  // Incrementa a posição de rolagem
-  scrollPos = (scrollPos + 1) % mensagemLen;
-  delay(600); // Controle da velocidade do letreiro
 
-  // Verifica se o botão foi pressionado
+  scrollPos = (scrollPos + 1) % mensagemLen;
+  delay(600); 
+
+
   estado = digitalRead(botao);
   if (estado == HIGH) {
     lcd.clear();
@@ -233,28 +233,38 @@ void loop() {
 
     lcd.clear();
     lcd.print("Gravando...");
+    // for (int i =15; i>0; i--){
+    //   lcd.clear();
+    //   lcd.print("Cronometro: ");
+    //   lcd.setCursor(12, 0);
+    //   lcd.print(i);
+    //   digitalWrite(2, HIGH);
+    //   delay(500);
+    //   digitalWrite(2, LOW);
+    //   delay(500);
+    // }
 
     // Gera o nome do arquivo automaticamente
     char file_name[20];
     do {
-      sprintf(file_name, "%03d.wav", file_number); // Cria nomes como 000.wav, 001.wav, 002.wav
-      file_number++; // Incrementa o número do arquivo
-    } while (SD.exists(file_name)); // Garante que o arquivo não exista
+      sprintf(file_name, "%03d.wav", file_number); 
+      file_number++; 
+    } while (SD.exists(file_name)); 
 
-    // Inicia a gravação
+   
     digitalWrite(recordLed, HIGH);
     audio.startRecording(file_name, sample_rate, mic_pin);
     Serial.print("Gravando no arquivo: ");
     Serial.println(file_name);
 
-    wait_min(15); // Tempo de gravação (15 segundos)
+    wait_min(15); 
     digitalWrite(recordLed, LOW);
     audio.stopRecording(file_name);
 
     Serial.println("Gravação encerrada.");
     lcd.clear();
     lcd.print("Resposta salva!");
-    delay(2000); // Aguarda 2 segundos antes de reiniciar
+    delay(2000);
 
     // Reinicia o loop
     lcd.clear();
